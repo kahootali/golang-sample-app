@@ -30,7 +30,7 @@ jobs:
 
     - name: Build & Push image
       run: |
-        VERSION=$(date +%s)
+        VERSION=$GITHUB_HEAD_REF-$GITHUB_RUN_NUMBER 
         IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
         docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
 
