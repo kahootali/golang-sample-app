@@ -37,7 +37,7 @@ jobs:
 
         docker push $IMAGE_ID:$VERSION
 
-    - name: deploy to cluster
+    - name: Version
       uses: steebchen/kubectl@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
