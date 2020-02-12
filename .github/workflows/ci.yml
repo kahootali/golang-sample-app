@@ -37,10 +37,18 @@ jobs:
 
         docker push $IMAGE_ID:$VERSION
         IMAGE_NAME=$IMAGE_ID:$VERSION
+        echo ::set-env IMAGE=$IMAGE_ID:$VERSION
 
-    - name: Version
-      uses: steebchen/kubectl@master
+    - uses: actions-hub/kubectl@master
+      name: Version
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       with:
-        args: set image -n prod deployment/golang-deployment golang=docker.pkg.github.com/$IMAGE_NAME
+        args: set image -n prod deployment/golang-deployment golang=docker.pkg.github.com/$IMAGE
+    
+    # - name: Version
+    #   uses: steebchen/kubectl@master
+    #   env:
+    #     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+    #   with:
+    #     args: set image -n prod deployment/golang-deployment golang=docker.pkg.github.com/$IMAGE_NAME
