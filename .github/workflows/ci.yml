@@ -4,7 +4,6 @@ on:
   pull_request:
 
 env:
-  # TODO: Change variable to your image's name.
   IMAGE_NAME: golang-sample-app
 
 jobs:
@@ -25,19 +24,24 @@ jobs:
       run: go build -v .
     
     - name: Log into Registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
-      - name: Build & Push image
-        run: |
-          VERSION=$(date +%s)
-          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
-          docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION          
+    - name: Build & Push image
+      run: |
+        VERSION=$GITHUB_HEAD_REF-$GITHUB_RUN_NUMBER 
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+        docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
 
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+        echo IMAGE_ID=$IMAGE_ID
+        echo VERSION=$VERSION
 
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
+        docker push $IMAGE_ID:$VERSION
+        IMAGE_NAME=$IMAGE_ID:$VERSION
+        echo ::set-env name=IMAGE::$IMAGE_NAME
 
-          docker tag image $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+    - uses: actions-hub/kubectl@master
+      name: Version
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      with:
+        args: version
