@@ -5,6 +5,9 @@ on:
     branches:
       - master
 
+env:
+  IMAGE_NAME: golang-sample-app
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,12 +31,12 @@ jobs:
     - name: Build & Push image
       run: |
         VERSION="v$GITHUB_RUN_NUMBER"
-        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}
-        docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
 
+        docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
         echo IMAGE_ID=$IMAGE_ID
         echo VERSION=$VERSION
-        docker tag $IMAGE_ID:$VERSION $IMAGE_ID:ubuntu-latest
+        docker tag $IMAGE_ID:$VERSION $IMAGE_ID:latest
 
         docker push $IMAGE_ID:$VERSION
         docker push $IMAGE_ID:latest
