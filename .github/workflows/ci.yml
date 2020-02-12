@@ -36,3 +36,9 @@ jobs:
         echo VERSION=$VERSION
 
         docker push $IMAGE_ID:$VERSION
+
+    - uses: danielr1996/kubectl-action@1.0.0
+      name: Version
+      with:
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+        args: version
