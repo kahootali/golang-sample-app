@@ -37,7 +37,7 @@ jobs:
 
         docker push $IMAGE_ID:$VERSION
         IMAGE_NAME=$IMAGE_ID:$VERSION
-        echo ::set-env IMAGE=$IMAGE_ID:$VERSION
+        echo ::set-env name=IMAGE::$IMAGE_NAME
 
     - uses: actions-hub/kubectl@master
       name: Version
