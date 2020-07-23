@@ -1,0 +1,38 @@
+name: Test Versioning
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Set Version
+      run: |
+        git pull --tags >/dev/null 2>&1
+        VERSION=$(git tag --sort=taggerdate | tail -1)
+        echo "Current tag for master: $VERSION"
+        VERSION=${VERSION:-'0.0.0'}
+        MAJOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+        MINOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+        PATCH="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+        PATCH=$((PATCH+1))
+
+        imageTag="$MAJOR.$MINOR.$PATCH"
+        IMAGE_NAME=${{ github.event.repository.name }}:$imageTag
+        echo "Image Name is: $IMAGE_NAME"
+        echo ::set-env name=IMAGE::$IMAGE_NAME
+
+    - name: Build & Push image
+      run: |
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE
+        echo "Image ID: $IMAGE_ID"
+        ls
+
+        
