@@ -28,10 +28,25 @@ jobs:
     - name: Log into Registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
+    - name: Set Version
+      run: |
+        git pull --tags >/dev/null 2>&1
+        VERSION=$(git tag --sort=taggerdate | tail -1)
+        echo "Current tag for master: $VERSION"
+        VERSION=${VERSION:-'0.0.0'}
+        MAJOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+        MINOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+        PATCH="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+        PATCH=$((PATCH+1))
+
+        imageTag="$MAJOR.$MINOR.$PATCH"
+        IMAGE_NAME=${{ github.event.repository.name }}:$imageTag
+        echo ::set-env name=IMAGE::$IMAGE_NAME
+
     - name: Build & Push image
       run: |
         VERSION="v$GITHUB_RUN_NUMBER"
-        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE
 
         docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
         echo IMAGE_ID=$IMAGE_ID
