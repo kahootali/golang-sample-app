@@ -13,25 +13,34 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Set Version
-      run: |
-        git pull --tags >/dev/null 2>&1
-        VERSION=$(git tag --sort=taggerdate | tail -1)
-        echo "Current tag for master: $VERSION"
-        VERSION=${VERSION:-'0.0.0'}
-        MAJOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
-        MINOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
-        PATCH="${VERSION%%.*}"; VERSION="${VERSION#*.}"
-        PATCH=$((PATCH+1))
 
-        IMAGE_TAG="$MAJOR.$MINOR.$PATCH"
-        IMAGE_NAME=${{ github.event.repository.name }}
-        echo ::set-env name=IMAGE_NAME::$IMAGE_NAME
-        echo ::set-env name=IMAGE_TAG::$IMAGE_TAG
-        echo "Image Name is: $IMAGE_NAME:$IMAGE_TAG"
+    - name: Generate Version
+      id: generate_version
+      uses: anothrNick/github-tag-action@1.17.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        DRY_RUN: true
+    # - name: Set Version
+    #   run: |
+    #     git pull --tags >/dev/null 2>&1
+    #     VERSION=$(git tag --sort=taggerdate | tail -1)
+    #     echo "Current tag for master: $VERSION"
+    #     VERSION=${VERSION:-'0.0.0'}
+    #     MAJOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+    #     MINOR="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+    #     PATCH="${VERSION%%.*}"; VERSION="${VERSION#*.}"
+    #     PATCH=$((PATCH+1))
+
+    #     IMAGE_TAG="$MAJOR.$MINOR.$PATCH"
+    #     IMAGE_NAME=${{ github.event.repository.name }}
+    #     echo ::set-env name=IMAGE_NAME::$IMAGE_NAME
+    #     echo ::set-env name=IMAGE_TAG::$IMAGE_TAG
+    #     echo "Image Name is: $IMAGE_NAME:$IMAGE_TAG"
 
     - name: Build & Push image
       run: |
+        IMAGE_TAG=${{ steps.generate_version.outputs.new_tag }}
         IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:$IMAGE_TAG
         echo "Image ID: $IMAGE_ID"
         ls
@@ -40,4 +49,4 @@ jobs:
       uses: anothrNick/github-tag-action@1.17.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        CUSTOM_TAG: $IMAGE_TAG
+        WITH_V: true
