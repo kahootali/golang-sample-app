@@ -50,11 +50,8 @@ jobs:
         
         echo "Image ID: $IMAGE_ID"
 
-        docker build . --file Dockerfile --tag $IMAGE_NAME:$IMAGE_TAG
-        docker tag $IMAGE_ID $IMAGE_NAME:latest
-
-        docker push $IMAGE_NAME:$IMAGE_TAG
-        docker push $IMAGE_NAME:latest
+        docker build . --file Dockerfile --tag $IMAGE_ID
+        docker push $IMAGE_ID
         echo ::set-env name=IMAGE::$IMAGE_ID
     - name: Push tag
       uses: anothrNick/github-tag-action@1.23.0
