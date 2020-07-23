@@ -11,37 +11,37 @@ jobs:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
-    - name: Set up Go 1.13
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.13
-      id: go
+    # - name: Set up Go 1.13
+    #   uses: actions/setup-go@v1
+    #   with:
+    #     go-version: 1.13
+    #   id: go
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Build Code
-      run: go build -v .
+    # - name: Build Code
+    #   run: go build -v .
     
-    - name: Log into Registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+    # - name: Log into Registry
+    #   run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
     - name: Build & Push image
       run: |
-        VERSION=pr-${{ github.event.pull_request.number }}-${$GITHUB_SHA::8}
+        VERSION=pr-${{ github.event.pull_request.number }}-${$GITHUB_SHA:0:8}
         IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
-        docker build . --file Dockerfile --tag $IMAGE_ID:$VERSION
+        
 
         echo IMAGE_ID=$IMAGE_ID
         echo VERSION=$VERSION
 
-        docker push $IMAGE_ID:$VERSION
+      
         IMAGE_NAME=$IMAGE_ID:$VERSION
         echo ::set-env name=IMAGE::$IMAGE_NAME
 
-    - uses: actions-hub/kubectl@master
-      name: Version
-      env:
-        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-      with:
-        args: version
+    # - uses: actions-hub/kubectl@master
+    #   name: Version
+    #   env:
+    #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+    #   with:
+    #     args: version
