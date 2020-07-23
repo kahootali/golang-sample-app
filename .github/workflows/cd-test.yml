@@ -21,6 +21,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
         DRY_RUN: true
+        DEFAULT_BUMP: "patch"
     # - name: Set Version
     #   run: |
     #     git pull --tags >/dev/null 2>&1
@@ -50,3 +51,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
+        DEFAULT_BUMP: "patch"
