@@ -1,0 +1,71 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: golang-sample-app
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    steps:
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+      
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Build Code
+      run: go build -v .
+    
+    - name: Log into Registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+    - name: Generate Version
+      id: generate_version
+      uses: anothrNick/github-tag-action@1.23.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        DRY_RUN: true
+        DEFAULT_BUMP: "patch"
+
+    - name: Build & Push image
+      run: |
+        # Just Tag
+        IMAGE_TAG=${{ steps.generate_version.outputs.new_tag }}
+        
+        # Just Image name
+        IMAGE_NAME=${{ github.event.repository.name }}
+        
+        #Image ID= Name + Tag
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:$IMAGE_TAG
+        
+        echo "Image ID: $IMAGE_ID"
+
+        docker build . --file Dockerfile --tag $IMAGE_NAME:$IMAGE_TAG
+        docker tag $IMAGE_ID $IMAGE_NAME:latest
+
+        docker push $IMAGE_NAME:$IMAGE_TAG
+        docker push $IMAGE_NAME:latest
+        echo ::set-env name=IMAGE::$IMAGE_ID
+    - name: Push tag
+      uses: anothrNick/github-tag-action@1.23.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        WITH_V: true
+        DEFAULT_BUMP: "patch"
+
+    # - name: Deploy
+    #   uses: steebchen/kubectl@master
+    #   env:
+    #     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+    #   with:
+    #     args: set image -n prod deployment/golang-deployment golang=$IMAGE
