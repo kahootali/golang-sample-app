@@ -27,7 +27,7 @@ jobs:
         IMAGE_TAG="$MAJOR.$MINOR.$PATCH"
         IMAGE_NAME=${{ github.event.repository.name }}
         echo ::set-env name=IMAGE_NAME::$IMAGE_NAME
-        echo ::set-env name=IMAGE_VERSION::$IMAGE_TAG
+        echo ::set-env name=IMAGE_TAG::$IMAGE_TAG
         echo "Image Name is: $IMAGE_NAME:$IMAGE_TAG"
 
     - name: Build & Push image
