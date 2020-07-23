@@ -28,6 +28,7 @@ jobs:
 
     - name: Build & Push image
       run: |
+        printenv
         echo $GITHUB_SHA
         GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-8)
         VERSION=pr-${{ github.event.pull_request.number }}-$GITHUB_SHA_SHORT
