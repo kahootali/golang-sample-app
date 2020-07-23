@@ -28,7 +28,8 @@ jobs:
 
     - name: Build & Push image
       run: |
-        VERSION=pr-${{ github.event.pull_request.number }}-${$GITHUB_SHA:0:8}
+        GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c1-8)
+        VERSION=pr-${{ github.event.pull_request.number }}-$GITHUB_SHA_SHORT
         IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
         
 
