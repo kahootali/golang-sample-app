@@ -24,15 +24,20 @@ jobs:
         PATCH="${VERSION%%.*}"; VERSION="${VERSION#*.}"
         PATCH=$((PATCH+1))
 
-        imageTag="$MAJOR.$MINOR.$PATCH"
-        IMAGE_NAME=${{ github.event.repository.name }}:$imageTag
-        echo "Image Name is: $IMAGE_NAME"
-        echo ::set-env name=IMAGE::$IMAGE_NAME
+        IMAGE_TAG="$MAJOR.$MINOR.$PATCH"
+        IMAGE_NAME=${{ github.event.repository.name }}
+        echo ::set-env name=IMAGE_NAME::$IMAGE_NAME
+        echo ::set-env name=IMAGE_VERSION::$IMAGE_TAG
+        echo "Image Name is: $IMAGE_NAME:$IMAGE_TAG"
 
     - name: Build & Push image
       run: |
-        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME:$IMAGE_TAG
         echo "Image ID: $IMAGE_ID"
         ls
 
-        
+    - name: Push tag
+      uses: anothrNick/github-tag-action@1.17.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CUSTOM_TAG: $IMAGE_TAG
