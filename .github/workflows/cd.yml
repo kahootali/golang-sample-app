@@ -65,4 +65,4 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
       with:
-        args: set image -n prod deployment/golang-deployment golang=$IMAGE
+        args: set image -n production deployment/golang-deployment golang=$IMAGE
