@@ -40,9 +40,9 @@ jobs:
         echo ::set-env name=IMAGE::$IMAGE_NAME
 
 
-    # - uses: actions-hub/kubectl@master
-    #   name: Version
-    #   env:
-    #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-    #   with:
-    #     args: version
+    - uses: actions-hub/kubectl@master
+      name: Version
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+      with:
+        args: version
