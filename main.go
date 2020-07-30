@@ -18,6 +18,10 @@ func main() {
 		fmt.Fprintf(w, "Status: UP")
 	})
 
+	http.HandleFunc("/dice", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Dice Class is starting from 8th August")
+	})
+
 	i := 0
 
 	http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
