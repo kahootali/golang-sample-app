@@ -1,8 +1,11 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: golang-deployment
 spec:
+  selector:
+    matchLabels:
+      app: golang-app
   replicas: 1
   strategy:
     type: "RollingUpdate"
@@ -16,7 +19,7 @@ spec:
     spec:
       containers:
       - name: golang
-        image: docker.pkg.github.com/kahootali/golang-sample-app/golang-sample-app:v2
+        image: docker.pkg.github.com/kahootali/golang-sample-app/golang-sample-app:v1.2.2
         ports:
         - containerPort: 8080
           name: tcp
