@@ -19,7 +19,7 @@ func main() {
 	})
 
 	http.HandleFunc("/dice", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Dice Class is starting from 8th August")
+		fmt.Fprintf(w, "Dice Class has started and 12th Septemeber is the 5th week")
 	})
 
 	i := 0
