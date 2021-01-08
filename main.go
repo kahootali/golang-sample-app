@@ -21,6 +21,10 @@ func main() {
 	http.HandleFunc("/dice", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Dice Class has started and 12th Septemeber is the 5th week")
 	})
+	
+	http.HandleFunc("/dice_student", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Talha Ahmad aka tass055, Kahoot Ali taught me well")
+	})
 
 	i := 0
 
