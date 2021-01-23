@@ -26,7 +26,7 @@ jobs:
       run: go build -v .
     
     - name: Log into Registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      run: echo "${{ secrets.TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
     - name: Generate Version
       id: generate_version
@@ -52,17 +52,9 @@ jobs:
 
         docker build . --file Dockerfile --tag $IMAGE_ID
         docker push $IMAGE_ID
-        echo ::set-env name=IMAGE::$IMAGE_ID
     - name: Push tag
       uses: anothrNick/github-tag-action@1.23.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
         DEFAULT_BUMP: "patch"
-
-    - name: Deploy
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-      with:
-        args: set image -n production deployment/golang-deployment golang=$IMAGE

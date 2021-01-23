@@ -24,7 +24,7 @@ jobs:
       run: go build -v .
     
     - name: Log into Registry
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      run: echo "${{ secrets.TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
     - name: Build & Push image
       run: |
@@ -36,13 +36,3 @@ jobs:
         echo VERSION=$VERSION
 
         docker push $IMAGE_ID:$VERSION
-        IMAGE_NAME=$IMAGE_ID:$VERSION
-        echo ::set-env name=IMAGE::$IMAGE_NAME
-
-
-    - uses: actions-hub/kubectl@master
-      name: Version
-      env:
-        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-      with:
-        args: version
