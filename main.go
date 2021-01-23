@@ -24,7 +24,7 @@ func main() {
 	
 	http.HandleFunc("/rehan", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Dice DevOps 05 class git practice")
-	})
+	
 
 	i := 0
 
