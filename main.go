@@ -23,7 +23,7 @@ func main() {
 	})
 	
 	http.HandleFunc("/dice-seminar", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Dice Seminar is in progress on January 29, 2021")
+		fmt.Fprintf(w, "Dice Seminar is in progress on January 29, 2021. The audience is quite good.")
 	})
 
 	i := 0
