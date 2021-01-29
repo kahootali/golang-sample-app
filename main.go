@@ -21,6 +21,10 @@ func main() {
 	http.HandleFunc("/dice", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Dice Class has started and 12th Septemeber is the 5th week")
 	})
+	
+	http.HandleFunc("/dice-seminar", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Dice Seminar is in progress on January 29, 2021")
+	})
 
 	i := 0
 
