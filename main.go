@@ -25,6 +25,10 @@ func main() {
 	http.HandleFunc("/batch-06-members", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Trainer 1:  Ali Kahoot\nTrainer 2: Usama Ahmed")
 	})
+	
+	http.HandleFunc("/rehan", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Dice DevOps 05 class git practice")
+	
 
 	i := 0
 
