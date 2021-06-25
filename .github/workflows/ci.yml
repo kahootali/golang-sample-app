@@ -98,9 +98,9 @@ jobs:
         message: '@${{ github.actor }} The pipeline failed! You better fix it before anyone else finds out! [Build](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.head.sha }}/checks) has Failed!'
         allow-repeats: false
     
-    - name: Deploy
-      uses: steebchen/kubectl@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-      with:
-        args: set image -n dev deployment/golang-deployment golang=${{ env.IMAGE }}
+    # - name: Deploy
+    #   uses: steebchen/kubectl@master
+    #   env:
+    #     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+    #   with:
+    #     args: set image -n dev deployment/golang-deployment golang=${{ env.IMAGE }}
