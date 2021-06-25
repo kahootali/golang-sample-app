@@ -26,6 +26,10 @@ func main() {
 		fmt.Fprintf(w, "Trainer 1:  Ali Kahoot\nTrainer 2: Usama Ahmed")
 	})
 
+	http.HandleFunc("/atif", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Lab - Pull Request, Devops-05")
+	})
+
 	i := 0
 
 	http.HandleFunc("/count", func(w http.ResponseWriter, r *http.Request) {
