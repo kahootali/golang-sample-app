@@ -9,7 +9,9 @@ WORKDIR /app
 EXPOSE 8080 
 
 COPY main.go .
- 
+
+RUN go env -w GO111MODULE=auto 
+
 RUN go build
  
 CMD ["./app"]

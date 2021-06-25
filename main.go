@@ -18,12 +18,12 @@ func main() {
 		fmt.Fprintf(w, "Status: UP")
 	})
 
-	http.HandleFunc("/dice", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Dice Class has started and 30th January is the 6th week")
+	http.HandleFunc("/batch-06", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "DevOps batch 06 has started and members are awesome")
 	})
 	
-	http.HandleFunc("/dice-seminar", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Dice Seminar is in progress on January 29, 2021. The audience is quite good.")
+	http.HandleFunc("/batch-06-members", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Trainer 1:  Ali Kahoot\nTrainer 2: Usama Ahmed")
 	})
 
 	i := 0
