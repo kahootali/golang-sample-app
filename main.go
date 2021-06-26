@@ -19,7 +19,7 @@ func main() {
 	})
 
 	http.HandleFunc("/batch-06", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "DevOps batch 06 has started and members are awesome")
+		fmt.Fprintf(w, "DevOps batch 06 has started and members are Very awesome :)")
 	})
 	
 	http.HandleFunc("/batch-06-members", func(w http.ResponseWriter, r *http.Request) {
