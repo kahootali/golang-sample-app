@@ -90,11 +90,11 @@ jobs:
         WITH_V: true
         DEFAULT_BUMP: "patch"
 
-    # - name: Deploy
-    #   uses: steebchen/kubectl@v2.0.0
-    #   with:
-    #     config: ${{ secrets.KUBE_CONFIG }}
-    #     command: set image -n prod deployment/golang-deployment golang=${{ env.IMAGE }}
+    - name: Deploy
+      uses: steebchen/kubectl@v2.0.0
+      with:
+        config: ${{ secrets.KUBE_CONFIG }}
+        command: set image -n prod deployment/golang-deployment golang=${{ env.IMAGE }}
 
     - name: Notify Slack
       uses: 8398a7/action-slack@v3
