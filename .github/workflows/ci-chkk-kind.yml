@@ -52,8 +52,10 @@ jobs:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
         CHKK_INSTALL_PATH: $GITHUB_WORKSPACE/bin
       run: |
-        mkdir ~/.chkk
         cat > ~/.chkk/config.yaml << EOF
+        filters:
+        - Secret.data # DO NOT EDIT THIS LINE
+        - Secret.data.* # DO NOT EDIT THIS LINE
         checklists:
         - chkls_b0ee6bd7-690d-4f47-b3cb-d241a92b89b0
         EOF

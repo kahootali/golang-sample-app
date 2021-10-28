@@ -8,4 +8,5 @@ helm repo update
 echo "ls in chkk path"
 ls ${CHKK_INSTALL_PATH}
 echo "ls finish"
+echo "Image Tag: ${IMAGE_TAG}"
 helm upgrade --install --create-namespace -f deploy/helm-values/dev.yaml --set deployment.image.tag="${IMAGE_TAG}" -n dev golang-app-dev tg/application-helm --post-renderer=${CHKK_INSTALL_PATH}/chkk-post-renderer
