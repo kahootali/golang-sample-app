@@ -26,6 +26,8 @@ jobs:
       run: |
         mkdir -p $INSTALL_PATH
         deploy/scripts/install-chkk.sh
+        cd $INSTALL_PATH 
+        ls
 
     - name: Install Kind
       run: |
@@ -43,6 +45,8 @@ jobs:
         CHKK_TOKEN: ${{ secrets.CHKK_TOKEN }}
         CHKK_INSTALL_PATH: $GITHUB_WORKSPACE/bin
       run: |
+        cd $CHKK_INSTALL_PATH 
+        ls
         IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8)
         deploy/scripts/deploy.sh
 
