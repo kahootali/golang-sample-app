@@ -21,7 +21,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Chkk Renderrer
+      env:
+        INSTALL_PATH: $GITHUB_WORKSPACE/bin
       run: |
+        mkdir -p $INSTALL_PATH
         deploy/scripts/install-chkk.sh
 
     - name: Install Kind

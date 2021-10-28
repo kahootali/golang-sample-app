@@ -171,8 +171,8 @@ Docs:
 EOS
 
 emph "Installing Chkk Post Renderer for Helm:"
-INSTALL_PATH=${DEFAULT_INSTALL_PATH}}
-
+INSTALL_PATH=${INSTALL_PATH:-${DEFAULT_INSTALL_PATH}}
+echo "Install Path: $INSTALL_PATH"
 if exists_but_not_writable "${INSTALL_PATH}"; then
     abort "${INSTALL_PATH} is not writable or does not exist."
 fi
