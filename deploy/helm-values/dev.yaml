@@ -5,6 +5,8 @@ labels:
   env: dev
 
 deployment:
+  annotations:
+    app.kubernetes.io/instance: golang-app-dev
   # Replicas to be created
   replicas: 1
 
@@ -15,7 +17,7 @@ deployment:
   image: 
     repository: kahootali/golang-sample-app
     tag: v1.0.0
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
 
   env: []
   envFrom: []
@@ -62,7 +64,7 @@ deployment:
   # Security Context for the pod
   securityContext:
     runAsNonRoot: true
-    runAsUser: 1001
+    runAsUser: 10001
     runAsGroup: 3000
     fsGroup: 2000
 
