@@ -1,0 +1,73 @@
+name: CI for Checkk
+
+on:
+  pull_request:
+
+env:
+  IMAGE_NAME: golang-sample-app
+
+jobs:
+  Check-Security:
+    env:
+      KIND_VERSION: "0.7.0"
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    name: Check Vulnerabilities or Security Actions
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Install Kind
+      run: |
+        curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
+        sudo install ./kind /usr/local/bin && rm kind
+        kind version
+        kind version | grep -q ${KIND_VERSION}
+    - name: Create Kind Cluster
+      run: |
+        kind create cluster
+        kubectl cluster-info
+
+    - name: Install Chkk Renderrer
+      run: |
+        bash -c "$(curl -fsSL https://get.chkk.dev/install.sh)"
+
+    - name: Test Chart with Chkk Default CheckList
+      env:
+        CHKK_TOKEN: ${{ secrets.CHKK_TOKEN }}
+      run: |
+        IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8)
+        deploy/scripts/deploy.sh
+
+    - name: Test Chart with My CheckList
+      env:
+        CHKK_TOKEN: ${{ secrets.CHKK_TOKEN }}
+      run: |
+        mkdir ~/.chkk
+        cat > ~/.chkk/config.yaml << EOF
+        checklists:
+        - chkls_b0ee6bd7-690d-4f47-b3cb-d241a92b89b0
+        EOF
+        IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8)
+        deploy/scripts/deploy.sh
+
+    # - name: Deploy
+    #   uses: steebchen/kubectl@v2.0.0
+    #   with:
+    #     config: ${{ secrets.KUBE_CONFIG }}
+    #     command: set image -n dev deployment/golang-deployment golang=${{ env.IMAGE }}
+
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      if: always()
+      with:
+        status: ${{ job.status }}
+        fields: repo,author,action,eventName,ref,workflow
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+    
