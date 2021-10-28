@@ -42,7 +42,7 @@ jobs:
     - name: Test Chart with Chkk Default CheckList
       env:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
-        CHKK_INSTALL_PATH: ${GITHUB_WORKSPACE}/bin
+        CHKK_INSTALL_PATH: $GITHUB_WORKSPACE/bin
       run: |
         ls $CHKK_INSTALL_PATH 
         IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8)
@@ -51,7 +51,7 @@ jobs:
     - name: Test Chart with My CheckList
       env:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
-        CHKK_INSTALL_PATH: ${GITHUB_WORKSPACE}/bin
+        CHKK_INSTALL_PATH: $GITHUB_WORKSPACE/bin
       run: |
         mkdir ~/.chkk
         cat > ~/.chkk/config.yaml << EOF
