@@ -33,7 +33,7 @@ jobs:
 
     - name: Install Chkk Renderrer
       run: |
-        bash -c "$(curl -fsSL https://get.chkk.dev/install.sh)"
+        deploy/scripts/install-chkk.sh
 
     - name: Test Chart with Chkk Default CheckList
       env:
