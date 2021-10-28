@@ -20,6 +20,10 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
+    - name: Install Chkk Renderrer
+      run: |
+        deploy/scripts/install-chkk.sh
+
     - name: Install Kind
       run: |
         curl -L -o kind https://github.com/kubernetes-sigs/kind/releases/download/v${KIND_VERSION}/kind-linux-amd64
@@ -30,10 +34,6 @@ jobs:
       run: |
         kind create cluster
         kubectl cluster-info
-
-    - name: Install Chkk Renderrer
-      run: |
-        deploy/scripts/install-chkk.sh
 
     - name: Test Chart with Chkk Default CheckList
       env:
