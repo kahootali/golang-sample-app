@@ -20,8 +20,8 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-  - name: Install Chkk Renderrer
-    uses: chkk-io/actions/k8s@main
+    - name: Install Chkk Renderrer
+      uses: chkk-io/actions/k8s@main
       id: precheck
       env:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
