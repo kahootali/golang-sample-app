@@ -20,13 +20,11 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Install Chkk Renderrer
+  - name: Install Chkk Renderrer
+    uses: chkk-io/actions/k8s@main
+      id: precheck
       env:
-        INSTALL_PATH: $GITHUB_WORKSPACE/bin
-      run: |
-        mkdir -p $INSTALL_PATH
-        deploy/scripts/install-chkk.sh
-        ls $INSTALL_PATH
+        CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
 
     - name: Install Kind
       run: |
@@ -40,17 +38,10 @@ jobs:
         kubectl cluster-info
 
     - name: Test Chart with Chkk Default CheckList
-      env:
-        CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
-        CHKK_INSTALL_PATH: $GITHUB_WORKSPACE/bin
       run: |
-        ls $CHKK_INSTALL_PATH 
         IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8) deploy/scripts/deploy.sh
 
     - name: Test Chart with My CheckList
-      env:
-        CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
-        CHKK_INSTALL_PATH: $GITHUB_WORKSPACE/bin
       run: |
         cat > ~/.chkk/config.yaml << EOF
         filters:
