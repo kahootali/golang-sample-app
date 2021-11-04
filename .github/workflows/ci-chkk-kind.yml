@@ -25,6 +25,7 @@ jobs:
       id: precheck
       env:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
+      with:
         cluster-id: "ci-runners"
         disable-audit: true
 
@@ -48,6 +49,7 @@ jobs:
       id: precheck
       env:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
+      with:  
         cluster-id: "ci-runners"
         disable-audit: true
         checklists:
