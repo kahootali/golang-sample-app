@@ -25,7 +25,7 @@ jobs:
       id: precheck
       env:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
-        cluster-id: "test"
+        cluster-id: "ci-runners"
         disable-audit: true
 
     - name: Install Kind
@@ -43,15 +43,17 @@ jobs:
       run: |
         IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8) deploy/scripts/deploy.sh
 
-    - name: Test Chart with My CheckList
-      run: |
-        cat > ~/.chkk/config.yaml << EOF
-        filters:
-        - Secret.data # DO NOT EDIT THIS LINE
-        - Secret.data.* # DO NOT EDIT THIS LINE
+    - name: Setup Custom Chkk Renderrer
+      uses: chkk-io/actions/k8s@main
+      id: precheck
+      env:
+        CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
+        cluster-id: "ci-runners"
+        disable-audit: true
         checklists:
         - chkls_b0ee6bd7-690d-4f47-b3cb-d241a92b89b0
-        EOF
+    - name: Test Chart with My CheckList
+      run: |
         IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8) deploy/scripts/deploy.sh
 
     # - name: Deploy
