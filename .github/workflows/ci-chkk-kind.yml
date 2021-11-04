@@ -46,7 +46,7 @@ jobs:
 
     - name: Setup Custom Chkk Renderrer
       uses: chkk-io/actions/k8s@main
-      id: precheck
+      id: setup-precheck
       env:
         CHKK_ACCESS_TOKEN: ${{ secrets.CHKK_TOKEN }}
       with:  
