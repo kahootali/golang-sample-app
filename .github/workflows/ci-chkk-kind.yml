@@ -52,8 +52,7 @@ jobs:
       with:  
         cluster-id: "ci-runners"
         disable-audit: true
-        checklists:
-        - chkls_b0ee6bd7-690d-4f47-b3cb-d241a92b89b0
+        checklists: "chkls_b0ee6bd7-690d-4f47-b3cb-d241a92b89b0"
     - name: Test Chart with My CheckList
       run: |
         IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8) deploy/scripts/deploy.sh
