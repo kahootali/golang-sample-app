@@ -1,0 +1,43 @@
+steps:
+
+  - id: 'Login to dockerhub'
+    name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: ['-c', 'docker login --username=$_DOCKERHUB_USERNAME --password=$$DOCKERHUB_TOKEN']
+    secretEnv: ['DOCKERHUB_TOKEN']
+
+  - id: 'Build docker image'
+    name: 'gcr.io/cloud-builders/docker'
+    args:
+      - build
+      - '-t'
+      - '$_DOCKERHUB_ORGANISATION/$_DOCKERHUB_REPOSITORY:$SHORT_SHA'
+      - '.'
+
+  - id: 'Show docker images'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['images']
+
+  - id: 'Push docker image'
+    name: 'gcr.io/cloud-builders/docker'
+    args: 
+      - push
+      - '$_DOCKERHUB_ORGANISATION/$_DOCKERHUB_REPOSITORY:$SHORT_SHA'
+
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=deployment/dev/
+    - --image=$_DOCKERHUB_ORGANISATION/$_DOCKERHUB_REPOSITORY:$SHORT_SHA
+    - --location=europe-west1-d	
+    - --cluster=demo-cluster
+
+substitutions:
+  _DOCKERHUB_ORGANISATION: "kahootali"
+  _DOCKERHUB_USERNAME: "kahootali"
+  _DOCKERHUB_REPOSITORY: "golang-sample-app"
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/DOCKERHUB_TOKEN/versions/2
+    env: 'DOCKERHUB_TOKEN'

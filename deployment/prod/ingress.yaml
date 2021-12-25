@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    kubernetes.io/ingress.class: nginx
+  name: golang-app
+  namespace: prod
+spec:
+  rules:
+  - host: prod.k8s.kahootali.com
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: golang-app
+            port:
+              name: web
+  tls:
+  - hosts:
+    - prod.k8s.kahootali.com
+    secretName: app-prod-tls-cert
