@@ -28,7 +28,7 @@ steps:
     args:
     - run
     - --filename=deployment/dev/
-    - --image=$_DOCKERHUB_ORGANISATION/$_DOCKERHUB_REPOSITORY:$SHORT_SHA'
+    - --image=$_DOCKERHUB_ORGANISATION/$_DOCKERHUB_REPOSITORY:$SHORT_SHA
     - --location=europe-west1-d	
     - --cluster=demo-cluster
 
