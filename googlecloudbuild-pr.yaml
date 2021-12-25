@@ -24,6 +24,14 @@ steps:
       - push
       - '$_DOCKERHUB_ORGANISATION/$_DOCKERHUB_REPOSITORY:$SHORT_SHA'
 
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+    - run
+    - --filename=deployment/dev/
+    - --image=$_DOCKERHUB_ORGANISATION/$_DOCKERHUB_REPOSITORY:$SHORT_SHA'
+    - --location=europe-west1-d	
+    - --cluster=demo-cluster
+
 substitutions:
   _DOCKERHUB_ORGANISATION: "kahootali"
   _DOCKERHUB_USERNAME: "kahootali"

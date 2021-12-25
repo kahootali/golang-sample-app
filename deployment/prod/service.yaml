@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: golang-app
+  namespace: prod
 spec:
   selector:
     app: golang-app
