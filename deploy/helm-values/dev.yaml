@@ -1,0 +1,130 @@
+# Name of the application.
+applicationName: "golang-sample-app"
+labels:
+  group: golang
+  env: dev
+
+deployment:
+  annotations:
+    app.kubernetes.io/instance: golang-app-dev
+  # Replicas to be created
+  replicas: 1
+
+  # Secrets used to pull image
+  imagePullSecrets: ""
+
+  # Image of the app container
+  image: 
+    repository: kahootali/golang-sample-app
+    tag: v1.0.0
+    pullPolicy: IfNotPresent
+
+  env: []
+  envFrom: []
+  
+  volumes: []
+  volumeMounts: []
+
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - all
+
+  # Readiness and Liveness probes
+  readinessProbe:
+    failureThreshold: 4
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 3
+    initialDelaySeconds: 10
+    httpGet:
+      path: /health
+      port: 8080
+  livenessProbe:
+    failureThreshold: 4
+    periodSeconds: 20
+    successThreshold: 1
+    timeoutSeconds: 3
+    initialDelaySeconds: 30
+    httpGet:
+      path: /health
+      port: 8080
+
+  # Resources to be defined for pod
+  resources: 
+    limits:
+      memory: 512Mi
+      cpu: 0.8
+    requests:
+      memory: 256Mi
+      cpu: 0.2
+
+  # Security Context for the pod
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 3000
+    fsGroup: 2000
+
+# Service object for servicing pods
+service:
+  applicationPort: 8080
+  ports:
+    - port: 8080
+      name: http
+      protocol: TCP
+      targetPort: 8080
+
+# Ingress object for exposing services
+ingress:
+  enabled: true
+  
+  # Port of the service that serves pods
+  servicePort: http
+  
+  # List of host addresses to be exposed by this Ingress
+  hosts:
+    - host: dev.k8s.kahootali.com
+      paths:
+      - /
+  
+  # Add annotations to this Ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+  # TLS details for this Ingress
+  tls:
+    - secretName: "app-dev-tls-cert"
+      hosts:
+        - dev.k8s.kahootali.com
+
+# Service Monitor to collect Prometheus metrices
+serviceMonitor:
+  enabled: false
+
+# Role Based Access Control
+rbac:
+  enabled: true
+
+  # Service Account to use by pods
+  serviceAccount:
+    enabled: true
+    name: ""
+
+endpointMonitor:
+  enabled: false
+
+# Additional ConfigMaps  
+configMap:
+  enabled: false
+
+# Additional Secrets
+secret:
+  enabled: false
+
+logging:
+  enabled: false
