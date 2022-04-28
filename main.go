@@ -23,11 +23,8 @@ func main() {
 	})
 	
 	http.HandleFunc("/batch-06-members", func(w http.ResponseWriter, r *http.Request) {
-<<<<<<< HEAD
 		fmt.Fprintf(w, "Trainer 1:  Ali Kahoot\nTrainer 2: Usama Ahmed\nStudne: Mohsin")
-=======
-		fmt.Fprintf(w, "Trainer 1:  Ali Kahoot\nTrainer 2: Usama Ahmed\nStudne: Mohsin Abbas")
->>>>>>> e329bef4242370b1e1309a614d1455eae1e67676
+		
 	})
 
 	i := 0
