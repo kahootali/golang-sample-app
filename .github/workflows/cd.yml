@@ -42,7 +42,7 @@ jobs:
       id: generate_vars
       run: |
         IMAGE_TAG=${{ steps.generate_version.outputs.new_tag }}
-        # Just Image name
+        ## Just Image name
         IMAGE_NAME=mohsinm/golang-sample-app 
         # Updated the Repo Name from Github to Dockerhub Username
         #Image ID= Name + Tag
