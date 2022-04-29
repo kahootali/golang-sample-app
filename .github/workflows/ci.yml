@@ -42,7 +42,7 @@ jobs:
         # Just Tag
         IMAGE_TAG=pr-${{ github.event.pull_request.number }}-$(echo ${{ github.event.pull_request.head.sha }} | cut -c1-8)
         # Just Image name
-        IMAGE_NAME=${{ github.repository }}
+        IMAGE_NAME=mohsinm/${{ github.repository }}
         #Image ID= Name + Tag
         IMAGE_ID=$IMAGE_NAME:$IMAGE_TAG
         IMAGE_REPO=$REGISTRY/$IMAGE_ID
