@@ -33,7 +33,7 @@ jobs:
         go build -v .
     - name: Generate Version
       id: generate_version
-      uses: anothrNick/github-tag-action@1.34.0
+      uses: anothrNick/github-tag-action@1.52.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
@@ -84,7 +84,7 @@ jobs:
         tags: ${{ env.IMAGE }}
 
     - name: Push tag
-      uses: anothrNick/github-tag-action@1.34.0
+      uses: anothrNick/github-tag-action@1.52.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         WITH_V: true
