@@ -1,4 +1,4 @@
-FROM golang:1.17.0 as build
+FROM golang:1.20 as build
 
 WORKDIR /app
 RUN go env -w GO111MODULE=auto 
