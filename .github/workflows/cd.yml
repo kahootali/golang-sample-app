@@ -27,7 +27,7 @@ jobs:
 
     - name: Build Code
       run: |
-        go get github.com/thedevsaddam/renderer/...
+        go mod download
         go build -v .
     
     - name: Generate Version
