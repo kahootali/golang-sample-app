@@ -47,8 +47,8 @@ jobs:
         IMAGE_ID=$IMAGE_NAME:$IMAGE_TAG
         IMAGE_REPO=$REGISTRY/$IMAGE_ID
         echo "Image: $IMAGE_REPO"
-        echo "::set-output name=image::$IMAGE_REPO"
-        echo "::set-output name=image_name::$IMAGE_NAME"
+        echo "image=$IMAGE_REPO" >>$GITHUB_OUTPUT
+        echo "image_name=$IMAGE_NAME" >>$GITHUB_OUTPUT
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3.0.0
